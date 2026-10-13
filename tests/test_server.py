@@ -24,7 +24,7 @@ class TestService(unittest.TestCase):
         self.assertEqual(self.get("/")[0], 400)
 
     def test_healthz_is_ok(self):
-        status, body = self.get("/healthz")
+         = self.get("/healthz")
         self.assertEqual(status, 200)
         self.assertTrue(body.strip())
 
