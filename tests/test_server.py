@@ -21,10 +21,10 @@ class TestService(unittest.TestCase):
             return e.code, ""
 
     def test_root_answers(self):
-        self.assertEqual(self.get("/")[0], 400)
+        self.assertEqual(self.get("/")[0], 200)
 
     def test_healthz_is_ok(self):
-         = self.get("/healthz")
+        status, body = self.get("/healthz")
         self.assertEqual(status, 200)
         self.assertTrue(body.strip())
 
