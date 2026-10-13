@@ -1,34 +1,26 @@
-name: CI
-
-on:
-  push:
-    branches: [ main ]
-
-  pull_request:
-
-permissions:
-  contents: read
-
-defaults:
-  run:
-    shell: bash
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-jobs:
-  test:
-    name: Run Unit Tests
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-
-      - uses: actions/setup-python@v7
-        with:
-          python-version: "3.12"
-          cache: pip
-
-      - run: ./scripts/test.sh
+echo name: CI > .github\workflows\ci.yml
+echo on: >> .github\workflows\ci.yml
+echo   push: >> .github\workflows\ci.yml
+echo     branches: [ main ] >> .github\workflows\ci.yml
+echo   pull_request: >> .github\workflows\ci.yml
+echo permissions: >> .github\workflows\ci.yml
+echo   contents: read >> .github\workflows\ci.yml
+echo defaults: >> .github\workflows\ci.yml
+echo   run: >> .github\workflows\ci.yml
+echo     shell: bash >> .github\workflows\ci.yml
+echo concurrency: >> .github\workflows\ci.yml
+echo   group: ${{ github.workflow }}-${{ github.ref }} >> .github\workflows\ci.yml
+echo   cancel-in-progress: true >> .github\workflows\ci.yml
+echo jobs: >> .github\workflows\ci.yml
+echo   test: >> .github\workflows\ci.yml
+echo     name: Run Unit Tests >> .github\workflows\ci.yml
+echo     runs-on: ubuntu-24.04 >> .github\workflows\ci.yml
+echo     steps: >> .github\workflows\ci.yml
+echo       - uses: actions/checkout@v7 >> .github\workflows\ci.yml
+echo         with: >> .github\workflows\ci.yml
+echo           persist-credentials: false >> .github\workflows\ci.yml
+echo       - uses: actions/setup-python@v7 >> .github\workflows\ci.yml
+echo         with: >> .github\workflows\ci.yml
+echo           python-version: "3.12" >> .github\workflows\ci.yml
+echo           cache: pip >> .github\workflows\ci.yml
+echo       - run: ./scripts/test.sh >> .github\workflows\ci.yml
