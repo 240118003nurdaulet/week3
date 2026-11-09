@@ -21,7 +21,7 @@ spec:
       containers:
         - name: app
           # 7. your M3 image: owner/project in lowercase, a colon, the FULL 40-character SHA
-          image: ghcr.io/240118003nurdaulet/week3:c20c09714b4ee6659ed070a68f00c8be390f3506
+          image: ghcr.io/240118003nurdaulet/week3:c1dfd4ad1b543ceabe3ba40c6f714715a0f21bd9
           env:
             - name: PORT
               value: "8080"               # 8. the port your app should listen on - you choose it
