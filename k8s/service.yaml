@@ -1,0 +1,12 @@
+# One stable name in front of the Pods: http://notes/
+apiVersion: v1
+kind: Service
+metadata:
+  name: notes            # 23. the name other Pods use
+spec:
+  selector:
+    app: notes           # 24. the label from the Deployment (blanks 3 and 4)
+  ports:
+    - name: http
+      port: 80           # the Service's own port
+      targetPort: http   # 25. the container's named port, which carries PORT

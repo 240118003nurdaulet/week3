@@ -1,0 +1,72 @@
+# M4: the notes service on Kubernetes. Apply with: kubectl apply -f k8s/
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notes                        # 1. the service's name
+spec:
+  replicas: 2                        # 2. two copies: one may fail while the other serves
+  selector:
+    matchLabels:
+      app: notes                     # 3. the label this Deployment owns
+  template:
+    metadata:
+      labels:
+        app: notes                   # 4. every Pod gets it - the same as 3
+    spec:
+      securityContext:
+        runAsNonRoot: true           # 5. refuse to start as root (Dockerfile: USER 1000:1000)
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: app
+          # 6. the M3 image, tagged with the FULL 40-character commit SHA
+          image: ghcr.io/240118003nurdaulet/week3:5fdb04065c512ade9e75296132dd6ac8d35134ff
+          ports:
+            - name: http
+              containerPort: 8080    # 7. the number the ConfigMap gives PORT
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: notes-config # 8. the ConfigMap in configmap.yaml
+                  key: PORT
+            - name: GREETING         # 9. src/server.py reads it for the "/" page
+              valueFrom:
+                configMapKeyRef:
+                  name: notes-config
+                  key: GREETING
+            - name: API_KEY          # 10. a secret value, from app-secret (never in Git)
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: API_KEY
+          readinessProbe:            # "should this Pod get traffic now?"
+            httpGet:
+              path: /healthz         # 11. the health endpoint
+              port: http             # 12. the named port above
+            periodSeconds: 5
+            failureThreshold: 3      # 5 x 3 = 15 s until the Pod leaves the Service
+          livenessProbe:             # "should this container be restarted?"
+            httpGet:
+              path: /healthz         # 13. the same endpoint as 11
+              port: http             # 14. the same port as 12
+            periodSeconds: 10        # 15. 10 x 3 = 30 s: readiness (15 s) notices first
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 50m               # 16. 5% of one CPU reserved
+              memory: 64Mi           # 17.
+            limits:
+              cpu: 250m              # 18. at least the request
+              memory: 128Mi          # 19. over this, the container is killed
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: tmp              # a writable /tmp, because the root filesystem is read-only
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
