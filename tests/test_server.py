@@ -23,6 +23,17 @@ class TestService(unittest.TestCase):
     def test_root_answers(self):
         self.assertEqual(self.get("/")[0], 200)
 
+    def test_root_uses_greeting_setting(self):
+        old = os.environ.get("GREETING")
+        os.environ["GREETING"] = "Salem"
+        try:
+            self.assertEqual(self.get("/")[1], "Salem from the notes service")
+        finally:
+            if old is None:
+                os.environ.pop("GREETING", None)
+            else:
+                os.environ["GREETING"] = old
+
     def test_healthz_is_ok(self):
         status, body = self.get("/healthz")
         self.assertEqual(status, 200)
