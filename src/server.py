@@ -8,7 +8,9 @@ class Handler(BaseHTTPRequestHandler):
         if self.path == "/healthz":
             self._send(200, b"ok")
         elif self.path == "/":
-            self._send(200, b"notes service")
+            # GREETING is a setting from the environment (a ConfigMap on Kubernetes)
+            greeting = os.environ.get("GREETING", "hello")
+            self._send(200, f"{greeting} from the notes service".encode())
         elif self.path == "/notes":
             self._send(200, str(len(NOTES)).encode())
         else:
