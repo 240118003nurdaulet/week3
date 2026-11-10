@@ -1,0 +1,8 @@
+# The settings, outside the image. Values are always text: keep the quotes.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: notes-config     # 20. the name the Deployment refers to (blank 8)
+data:
+  PORT: "8080"           # 21. the port the app listens on - the same as containerPort
+  GREETING: "Salem"      # 22. shown on the "/" page by src/server.py
