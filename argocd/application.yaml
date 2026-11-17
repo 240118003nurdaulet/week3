@@ -1,0 +1,19 @@
+# M5: Argo CD deploys k8s/ from the main branch of this repository, and keeps it that way.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: notes                    # 1. this app's name in Argo CD
+  namespace: argocd              # 2. Argo CD only looks for Applications in its own namespace
+spec:
+  project: default               # Argo CD's built-in project (the marker uses a strict one)
+  source:
+    repoURL: https://github.com/240118003nurdaulet/week3   # 3. this repository: public, https
+    targetRevision: main         # 4. the branch Argo CD follows: the one pull requests merge into
+    path: k8s                    # 5. the folder with the M4 manifests
+  destination:
+    server: https://kubernetes.default.svc   # "this cluster": the one Argo CD runs in
+    namespace: default           # 6. where the app ran in Week 9 (k8s/ names no namespace)
+  syncPolicy:
+    automated:                   # pull automatically: nobody presses "Sync"
+      prune: true                # 7. yes: what is deleted from Git is deleted from the cluster
+      selfHeal: true             # 8. yes: changes made by hand in the cluster are undone
