@@ -20,7 +20,7 @@ spec:
       containers:
         - name: app
           # 6. the M3 image, tagged with the FULL 40-character commit SHA
-          image: ghcr.io/240118003nurdaulet/week3:880ebfce731981826109f6283cb5cc2c3c69d9f3
+          image: ghcr.io/240118003nurdaulet/week3:123a9a874ee76478a53fe6ea0a2bd7671b31e99d
           ports:
             - name: http
               containerPort: 8080    # 7. the number the ConfigMap gives PORT
